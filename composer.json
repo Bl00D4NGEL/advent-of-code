@@ -1,0 +1,17 @@
+{
+    "name": "dominik/advent-of-code",
+    "description": "Solve the advent of code tasks",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Dominik Peters",
+            "email": "advent-of-code@d-peters.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
