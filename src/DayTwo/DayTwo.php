@@ -11,19 +11,38 @@ final class DayTwo
         $numbersInput = file_get_contents(__DIR__ . '/Fixture/input.txt');
         $commands = explode("\n", $numbersInput);
         $commands = array_map('trim', $commands);
-        $position = new Position(0,0);
+
+        $position = $this->processCommands(new Position(0,0), $commands);
+
+        return $position->horizontalPosition() * $position->depth();
+    }
+
+    public function getResultWithAim(): int
+    {
+        $numbersInput = file_get_contents(__DIR__ . '/Fixture/input.txt');
+        $commands = explode("\n", $numbersInput);
+        $commands = array_map('trim', $commands);
+        $position = $this->processCommands(new PositionWithAim(0, new Position(0, 0)), $commands);
+
+        return $position->horizontalPosition() * $position->depth();
+    }
+
+    /**
+     * @param string[] $commands
+     */
+    private function processCommands(PositionInterface $startingPosition, array $commands): PositionInterface
+    {
         foreach ($commands as $command) {
             if (preg_match('/forward (\d+)/', $command, $matches)) {
-                $position = $position->moveForward((int)$matches[1]);
+                $startingPosition = $startingPosition->moveForward((int)$matches[1]);
             }
             if (preg_match('/up (\d+)/', $command, $matches)) {
-                $position = $position->moveUp((int)$matches[1]);
+                $startingPosition = $startingPosition->moveUp((int)$matches[1]);
             }
             if (preg_match('/down (\d+)/', $command, $matches)) {
-                $position = $position->moveDown((int)$matches[1]);
+                $startingPosition = $startingPosition->moveDown((int)$matches[1]);
             }
         }
-
-        return $position->horizontalPosition * $position->depth;
+        return $startingPosition;
     }
 }

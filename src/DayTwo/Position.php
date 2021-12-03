@@ -5,26 +5,38 @@ declare(strict_types=1);
 
 namespace App\DayTwo;
 
-final class Position
+use JetBrains\PhpStorm\Pure;
+
+final class Position implements PositionInterface
 {
     public function __construct(
-        public int $depth,
-        public int $horizontalPosition
+        private int $depth,
+        private int $horizontalPosition
     ) {
     }
 
-    public function moveForward(int $amount): self
+    #[Pure] public function moveForward(int $amount): self
     {
         return new self($this->depth, $this->horizontalPosition + $amount);
     }
 
-    public function moveDown(int $amount): self
+    #[Pure] public function moveDown(int $amount): self
     {
         return new self($this->depth + $amount, $this->horizontalPosition);
     }
 
-    public function moveUp(int $amount): self
+    #[Pure] public function moveUp(int $amount): self
     {
         return new self($this->depth - $amount, $this->horizontalPosition);
+    }
+
+    #[Pure] public function depth(): int
+    {
+        return $this->depth;
+    }
+
+    #[Pure] public function horizontalPosition(): int
+    {
+        return $this->horizontalPosition;
     }
 }

@@ -11,3 +11,4 @@ print "Day 1 Part 2 Increments: " . $dayOne->getGroupsIncrements() . PHP_EOL;
 
 $dayTwo = new DayTwo();
 print "Day 2 Part 1 Result: " . $dayTwo->getResult() . PHP_EOL;
+print "Day 2 Part 2 Result: " . $dayTwo->getResultWithAim() . PHP_EOL;
