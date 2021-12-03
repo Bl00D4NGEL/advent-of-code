@@ -37,7 +37,6 @@ final class DayOne
                 continue;
             }
             if ($number > $prevNumber) {
-                print "$number > $prevNumber\n";
                 $increments++;
             }
             $prevNumber = $number;
