@@ -15,6 +15,15 @@ final class DayOne
         return $this->calculateIncrements($numbers);
     }
 
+    public function getGroupsIncrements(): int
+    {
+        $numbersInput = file_get_contents(__DIR__ . '/Fixture/input.txt');
+        $numbers = explode("\n", $numbersInput);
+        $numbers = array_map(static fn (string $number): int => (int)$number, $numbers);
+
+        return $this->calculateGroupIncrements($numbers);
+    }
+
     /**
      * @param int[] $numbers
      */
@@ -34,5 +43,17 @@ final class DayOne
             $prevNumber = $number;
         }
         return $increments;
+    }
+
+    /**
+     * @param int[] $numbers
+     */
+    private function calculateGroupIncrements(array $numbers): int
+    {
+        $sums = [];
+        for ($i = 0; $i < count($numbers); $i++) {
+            $sums[] = array_sum(array_slice($numbers, $i, 3));
+        }
+        return $this->calculateIncrements($sums);
     }
 }
