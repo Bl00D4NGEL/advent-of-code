@@ -17,3 +17,6 @@ print "Day 2 Part 2 Result: " . $dayTwo->getResultWithAim() . PHP_EOL;
 $dayThree = new DayThree();
 print "Day 3 Part 1 Result: " . $dayThree->getPowerConsumption() . PHP_EOL;
 print "Day 3 Part 2 Result: " . $dayThree->getRating() . PHP_EOL;
+
+$dayFour = new \App\DayFour\DayFour();
+print "Day 4 Part 1 Result: " . $dayFour->getResult() . PHP_EOL;
