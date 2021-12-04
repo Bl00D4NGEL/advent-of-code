@@ -18,8 +18,8 @@ final class BoardGenerator
     {
         $rows = [];
         foreach ($lines as $line) {
+            $line = trim($line);
             $numbers = preg_split('/\s+/', $line);
-            $numbers = array_map('trim', $numbers);
             $rows[] = array_map(
                 fn (string $number): Field => $this->fieldCollection->getField((int)$number), $numbers
             );

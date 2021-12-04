@@ -1,5 +1,6 @@
 <?php
 
+use App\DayFour\DayFour;
 use App\DayOne\DayOne;
 use App\DayThree\DayThree;
 use App\DayTwo\DayTwo;
@@ -18,5 +19,6 @@ $dayThree = new DayThree();
 print "Day 3 Part 1 Result: " . $dayThree->getPowerConsumption() . PHP_EOL;
 print "Day 3 Part 2 Result: " . $dayThree->getRating() . PHP_EOL;
 
-$dayFour = new \App\DayFour\DayFour();
-print "Day 4 Part 1 Result: " . $dayFour->getResult() . PHP_EOL;
+$dayFour = new DayFour();
+print "Day 4 Part 1 Result: " . $dayFour->getResultForFirstBoardToWin() . PHP_EOL;
+print "Day 4 Part 2 Result: " . $dayFour->getResultForLastBoardToWin() . PHP_EOL;

@@ -13,13 +13,13 @@ use Exception;
 final class DayFour
 {
     private FieldCollection $fieldsCollection;
+    private BoardGenerator $boardGenerator;
 
     /** @var Board[] */
     private array $boards = [];
 
     /** @var int[] */
     private array $numbersToDraw = [];
-    private BoardGenerator $boardGenerator;
 
     public function __construct()
     {
@@ -27,9 +27,8 @@ final class DayFour
         $this->boardGenerator = new BoardGenerator($this->fieldsCollection);
     }
 
-    public function getResult(): int
+    public function getResultForFirstBoardToWin(): int
     {
-        // 40470 too high
         $this->parseInput();
 
         foreach ($this->numbersToDraw as $numberToDraw) {
@@ -40,11 +39,38 @@ final class DayFour
                 }
             }
         }
+
         throw new Exception('Could not find a winning board with the draws given');
+    }
+
+    public function getResultForLastBoardToWin(): int
+    {
+        $this->parseInput();
+
+        foreach ($this->numbersToDraw as $numberToDraw) {
+            $this->fieldsCollection->getField($numberToDraw)->draw();
+
+            if (count($this->boards) === 1) {
+                $board = current($this->boards);
+                if ($board->isWon()) {
+                    return $this->calculateBoardResult($board, $numberToDraw);
+                }
+            }
+
+            $this->boards = array_filter($this->boards, static fn (Board $board): bool => !$board->isWon());
+        }
+
+        throw new Exception('No board won');
     }
 
     private function parseInput(): void
     {
+        // reset
+        $this->fieldsCollection = new FieldCollection();
+        $this->boardGenerator = new BoardGenerator($this->fieldsCollection);
+        $this->numbersToDraw = [];
+        $this->boards = [];
+
         $input = file_get_contents(__DIR__ . '/Fixture/input.txt');
         $lines = explode("\n", $input);
         // First line are the numbers drawn
@@ -70,7 +96,7 @@ final class DayFour
 
     private function generateBoards(array $lines): void
     {
-        for ($i = 0, $iMax = count($lines); $i <= $iMax; $i += 6) {
+        for ($i = 0, $iMax = count($lines); $i < $iMax; $i += 6) {
             // Since the board is 5x5 and the first line is an empty line we take 5 lines
             $slicedLines = array_slice($lines, $i + 1, 5);
             $this->boards[] = $this->boardGenerator->generate($slicedLines);
