@@ -5,23 +5,20 @@ declare(strict_types=1);
 
 namespace App\DayThree;
 
+use Exception;
+use JetBrains\PhpStorm\Pure;
+
 final class DayThree
 {
     public function getPowerConsumption(): int
     {
-        $numbersInput = file_get_contents(__DIR__ . '/Fixture/input.txt');
-        $reportLines = explode("\n", $numbersInput);
-        $reportLines = array_map('trim', $reportLines);
-        $reportLines = array_filter($reportLines);
+        $reportLines = $this->getInput();
         // We assume that the first element has the length as every other line
         $lineLength = strlen($reportLines[0]);
         $gammaBits = [];
         for ($i = 0; $i < $lineLength; $i++) {
             $valuesAtIndex = array_map(static fn (string $reportLine): int => (int)$reportLine[$i], $reportLines);
-            $gammaBits = [
-                ...$gammaBits,
-                $this->getMostCommonNumber($valuesAtIndex),
-            ];
+            $gammaBits[] = $this->getMostCommonNumber($valuesAtIndex);
         }
 
         $gamma = bindec(implode('', $gammaBits));
@@ -36,70 +33,82 @@ final class DayThree
 
     public function getRating(): int
     {
-        $numbersInput = file_get_contents(__DIR__ . '/Fixture/input.txt');
-        $reportLines = explode("\n", $numbersInput);
-        $reportLines = array_map('trim', $reportLines);
-        $reportLines = array_filter($reportLines);
+        $reportLines = $this->getInput();
+
+        $oxygenRating = $this->determineRating($reportLines, [$this, 'getMostCommonNumber']);
+        $scrubberRating = $this->determineRating($reportLines, [$this, 'getLeastCommonNumber']);
+
+        return $oxygenRating * $scrubberRating;
+    }
+
+    /**
+     * @param string[] $reportLines
+     * @param callable $numberDeterminer
+     * @return int
+     * @throws Exception
+     */
+    private function determineRating(array $reportLines, callable $numberDeterminer): int
+    {
         // We assume that the first element has the length as every other line
         $lineLength = strlen($reportLines[0]);
-        $oxygenRating = '';
+        $rating = '';
         $modifiedReportLines = $reportLines;
         for ($i = 0; $i < $lineLength; $i++) {
             $valuesAtIndex = array_map(static fn (string $reportLine): int => (int)$reportLine[$i], $modifiedReportLines);
-            $mostCommon = $this->getMostCommonNumber($valuesAtIndex);
-            $oxygenRating .= $mostCommon;
-            $modifiedReportLines = array_filter($modifiedReportLines, static fn(string $reportLine): bool => str_starts_with($reportLine, $oxygenRating));
-            if (count($modifiedReportLines) === 1) {
-                $oxygenRating = current($modifiedReportLines);
-                break;
+            $rating .= $numberDeterminer($valuesAtIndex);
+            $modifiedReportLines = array_filter($modifiedReportLines, static fn(string $reportLine): bool => str_starts_with($reportLine, $rating));
+            if ($this->isRatingDetermined($modifiedReportLines)) {
+                return $this->getFinalRating($modifiedReportLines);
             }
         }
 
-        $scrubberRating = '';
-        $modifiedReportLines = $reportLines;
-        for ($i = 0; $i < $lineLength; $i++) {
-            $valuesAtIndex = array_map(static fn (string $reportLine): int => (int)$reportLine[$i], $modifiedReportLines);
-            $mostCommon = $this->getLeastCommonNumber($valuesAtIndex);
-            $scrubberRating .= $mostCommon;
-            $modifiedReportLines = array_filter($modifiedReportLines, static fn(string $reportLine): bool => str_starts_with($reportLine, $scrubberRating));
-            if (count($modifiedReportLines) === 1) {
-                $scrubberRating = current($modifiedReportLines);
-                break;
-            }
-        }
-
-        return bindec($oxygenRating) * bindec($scrubberRating);
+        throw new Exception('Could not determine rating');
     }
 
     /**
      * @param int[] $valuesAtIndex
      */
-    private function getMostCommonNumber(array $valuesAtIndex): int
+    #[Pure] private function getMostCommonNumber(array $valuesAtIndex): int
     {
         // Since there will only be 1s and 0s we can assume that if the sum of the array is smaller than the total
         // report line count divided by 2 then the majority is 0s, otherwise it's 1s
         // e.g. 1000 lines => 500 is half of it, if the sum is 450 then there are 550 0s
         $onesCount = array_sum($valuesAtIndex);
-
-        if (count($valuesAtIndex) === 2) {
-            return 1; // rule of CoA
-        }
         return count($valuesAtIndex) / 2 > $onesCount ? 0 : 1;
     }
 
     /**
      * @param int[] $valuesAtIndex
      */
-    private function getLeastCommonNumber(array $valuesAtIndex): int
+    #[Pure] private function getLeastCommonNumber(array $valuesAtIndex): int
     {
-        // Since there will only be 1s and 0s we can assume that if the sum of the array is smaller than the total
-        // report line count divided by 2 then the majority is 0s, otherwise it's 1s
-        // e.g. 1000 lines => 500 is half of it, if the sum is 450 then there are 550 0s
-        $onesCount = array_sum($valuesAtIndex);
+        return $this->getMostCommonNumber($valuesAtIndex) === 1 ? 0 : 1;
+    }
 
-        if (count($valuesAtIndex) === 2) {
-            return 0; // rule of CoA
-        }
-        return count($valuesAtIndex) / 2 > $onesCount ? 1: 0;
+    /**
+     * @param string[] $modifiedReportLines
+     */
+    private function isRatingDetermined(array $modifiedReportLines): bool
+    {
+        return count($modifiedReportLines) === 1;
+    }
+
+    /**
+     * @param string[] $modifiedReportLines
+     */
+    private function getFinalRating(array $modifiedReportLines): int
+    {
+        return bindec(current($modifiedReportLines));
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getInput(): array
+    {
+        $numbersInput = file_get_contents(__DIR__ . '/Fixture/input.txt');
+        $reportLines = explode("\n", $numbersInput);
+        $reportLines = array_map('trim', $reportLines);
+        return array_filter($reportLines);
     }
 }
