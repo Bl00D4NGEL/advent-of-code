@@ -6,7 +6,7 @@ namespace App\DayFive;
 
 final class Formatter
 {
-    public function formatPathPoints(Line $line): void
+    public function formatPathPoints(Line|DiagonalLine $line): void
     {
         $this->formatLine($line);
         foreach ($line->getPathPoints() as $pathPoint) {
@@ -14,7 +14,7 @@ final class Formatter
         }
     }
 
-    public function formatLine(Line $line): void
+    public function formatLine(Line|DiagonalLine $line): void
     {
         printf("%s, %s -> %s, %s\n", $line->pointA->x, $line->pointA->y, $line->pointB->x, $line->pointB->y);
     }

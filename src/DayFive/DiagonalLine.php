@@ -7,7 +7,7 @@ namespace App\DayFive;
 use JetBrains\PhpStorm\Immutable;
 use JetBrains\PhpStorm\Pure;
 
-final class Line
+final class DiagonalLine
 {
     public function __construct(
         #[Immutable]
@@ -27,7 +27,7 @@ final class Line
             return true;
         }
 
-        return false;
+        return $this->isValidDiagonal();
     }
 
     /**
@@ -38,8 +38,11 @@ final class Line
         if ($this->isValidX()) {
             return $this->createYPoints();
         }
+        if ($this->isValidY()) {
+            return $this->createXPoints();
+        }
 
-        return $this->createXPoints();
+        return $this->createDiagonalPoints();
     }
 
     private function isValidX(): bool
@@ -79,5 +82,43 @@ final class Line
         }
 
         return $paths;
+    }
+
+    private function isValidDiagonal(): bool
+    {
+        $diffX = abs($this->pointA->x - $this->pointB->x);
+        $diffY = abs($this->pointA->y - $this->pointB->y);
+        return $diffX === $diffY;
+    }
+
+    /**
+     * @return Point[]
+     */
+    #[Pure] private function createDiagonalPoints(): array
+    {
+        $points = [];
+        $diff = abs($this->pointA->x - $this->pointB->x);
+        for ($i = 0; $i <= $diff; $i++) {
+            $points[] = new Point($this->calculateNewX($i), $this->calculateNewY($i));
+        }
+        return $points;
+    }
+
+    private function calculateNewX(int $steps): int
+    {
+        if ($this->pointA->x - $this->pointB->x > 0) {
+            return $this->pointA->x - $steps;
+        }
+
+        return $this->pointA->x + $steps;
+    }
+
+    private function calculateNewY(int $steps): int
+    {
+        if ($this->pointA->y - $this->pointB->y > 0) {
+            return $this->pointA->y - $steps;
+        }
+
+        return $this->pointA->y + $steps;
     }
 }

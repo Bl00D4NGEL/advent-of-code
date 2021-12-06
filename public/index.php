@@ -26,3 +26,4 @@ print "Day 4 Part 2 Result: " . $dayFour->getResultForLastBoardToWin() . PHP_EOL
 
 $dayFive = new DayFive();
 print "Day 5 Part 1 Result: " . $dayFive->getOverlapCount() . PHP_EOL;
+print "Day 5 Part 2 Result: " . $dayFive->getDiagonalOverlapCount() . PHP_EOL;
