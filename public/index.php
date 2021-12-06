@@ -1,5 +1,6 @@
 <?php
 
+use App\DayFive\DayFive;
 use App\DayFour\DayFour;
 use App\DayOne\DayOne;
 use App\DayThree\DayThree;
@@ -22,3 +23,6 @@ print "Day 3 Part 2 Result: " . $dayThree->getRating() . PHP_EOL;
 $dayFour = new DayFour();
 print "Day 4 Part 1 Result: " . $dayFour->getResultForFirstBoardToWin() . PHP_EOL;
 print "Day 4 Part 2 Result: " . $dayFour->getResultForLastBoardToWin() . PHP_EOL;
+
+$dayFive = new DayFive();
+print "Day 5 Part 1 Result: " . $dayFive->getOverlapCount() . PHP_EOL;
