@@ -41,3 +41,4 @@ print "Day 7 Part 2 Result: " . $daySeven->getCheapestOutcomeNew() . PHP_EOL;
 
 $dayEight = new DayEight();
 print "Day 8 Part 1 Result: " . $dayEight->getOccurrences() . PHP_EOL;
+print "Day 8 Part 2 Result: " . $dayEight->getDecodedSum() . PHP_EOL;
