@@ -30,4 +30,5 @@ print "Day 5 Part 1 Result: " . $dayFive->getOverlapCount() . PHP_EOL;
 print "Day 5 Part 2 Result: " . $dayFive->getDiagonalOverlapCount() . PHP_EOL;
 
 $daySix = new DaySix();
-print "Day 6 Part 1 Result: " . $daySix->simulate() . PHP_EOL;
+print "Day 6 Part 1 Result: " . $daySix->simulate(80) . PHP_EOL;
+print "Day 6 Part 2 Result: " . $daySix->simulate(256) . PHP_EOL;
