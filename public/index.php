@@ -3,6 +3,7 @@
 use App\DayFive\DayFive;
 use App\DayFour\DayFour;
 use App\DayOne\DayOne;
+use App\DaySeven\DaySeven;
 use App\DaySix\DaySix;
 use App\DayThree\DayThree;
 use App\DayTwo\DayTwo;
@@ -32,3 +33,6 @@ print "Day 5 Part 2 Result: " . $dayFive->getDiagonalOverlapCount() . PHP_EOL;
 $daySix = new DaySix();
 print "Day 6 Part 1 Result: " . $daySix->simulate(80) . PHP_EOL;
 print "Day 6 Part 2 Result: " . $daySix->simulate(256) . PHP_EOL;
+
+$daySeven = new DaySeven();
+print "Day 7 Part 1 Result: " . $daySeven->getCheapestOutcome() . PHP_EOL;
