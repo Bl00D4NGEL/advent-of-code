@@ -1,5 +1,6 @@
 <?php
 
+use App\DayEight\DayEight;
 use App\DayFive\DayFive;
 use App\DayFour\DayFour;
 use App\DayOne\DayOne;
@@ -36,4 +37,7 @@ print "Day 6 Part 2 Result: " . $daySix->simulate(256) . PHP_EOL;
 
 $daySeven = new DaySeven();
 print "Day 7 Part 1 Result: " . $daySeven->getCheapestOutcome() . PHP_EOL;
-print "Day 7 Part 1 Result: " . $daySeven->getCheapestOutcomeNew() . PHP_EOL;
+print "Day 7 Part 2 Result: " . $daySeven->getCheapestOutcomeNew() . PHP_EOL;
+
+$dayEight = new DayEight();
+print "Day 8 Part 1 Result: " . $dayEight->getOccurrences() . PHP_EOL;
